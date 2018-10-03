@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Cấp ngành</h2>
+
+<div class="panel panel-group">
+
+    <div class="form-group">
+        <input type="hidden" id="txtId" />
+        <input placeholder="Nhập cấp ngành" id="txtCapNganh" class="form-control" />
+    </div>
+    <div class="form-group">
+        <select class="form-control" id="ddCapCha">
+            <option value="" selected>Chọn cấp ngành</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <input placeholder="Nhập tên cấp" id="txtTenCapNganh" class="form-control" />
+    </div>    
+    <div class="form-group">
+        <button class="btn btn-primary" id="btnSave">Lưu</button>
+    </div>
+</div>
+
+
+<div class="panel-group">
+    <div class="container-fluid">
+
+    </div>
+</div>
+
+<div class="wrapper">
+    <table class="tree">
+        @*<tr class="treegrid-1">
+                <td>Root node</td>
+                <td>Additional info</td>
+            </tr>
+            <tr class="treegrid-2 treegrid-parent-1">
+                <td>Node 1-1</td>
+                <td>Additional info</td>
+            </tr>
+            <tr class="treegrid-3 treegrid-parent-1">
+                <td>Node 1-2</td>
+                <td>Additional info</td>
+            </tr>
+            <tr class="treegrid-4 treegrid-parent-3">
+                <td>Node 1-2-1</td>
+                <td>Additional info</td>
+            </tr>
+            <tr class="treegrid-5 treegrid-parent-3">
+                <td>Node 1-2-1</td>
+                <td>Additional info</td>
+            </tr>
+            <tr class="treegrid-6 treegrid-parent-3">
+                <td>Node 1-2-1</td>
+                <td>Additional info</td>
+            </tr>
+            <tr class="treegrid-7 treegrid-parent-4">
+                <td>Node 1-2-1.1</td>
+                <td>Additional info</td>
+            </tr>*@
+        @*<script type="text/javascript">
+
+            </script>*@
+    </table>
+    <table class="tree-main" data-options="url:'get_data.php',idField:'id',treeField:'name'">
+        
+    </table>
+</div>
+@section scripts{
+    <script src="~/Scripts/js/jquery.treegrid.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            loadTreeGrid();
+            $("#btnSave").off('click').on('click', function () {
+                var cap = $("#txtCapNganh").val();
+                var capcha = $("#ddCapCha option:selected").val();
+                var tencapcha = $("#txtTenCapNganh").val();
+                var caporder = $("#txtOrder").val();
+                if (cap != "") {
+                    $.ajax({
+                        url: "/CapNganh/InsertData",
+                        data: {
+                            CapOrder: caporder,
+                            Cap: cap,
+                            CapCha: capcha,
+                            Caption: tencapcha
+                        },
+                        type: "POST",
+                        datatype: "json",
+
+                        success: function (response) {
+                            if (response.data > 0) {
+                                alert("Insert thành công!");
+                                loadCapCha();
+                            }
+                        }
+                    });
+                }
+            });
+            $(".tree").off('click').on('click', 'button', function () {
+                if (getSelectorEndClass($(this)) == "btnEdit")
+                {
+                    alert($(this).data("id"));
+                    $.ajax({
+                        url: "/CapNganh/GetById",
+                        data: { id: $(this).data("id") },
+                        type: "GET",
+                        datatype: "json",
+
+                        success: function (response) {
+                            $("#txtId").val(response.Id);
+                            $("#txtCapNganh").val(response.Cap);
+                            $("#ddCapCha ").val(response.CapCha);
+                            $("#txtTenCapNganh").val(response.Caption);
+                            $("#txtOrder").val(response.CapOrder);
+                        },
+
+                    });
+                }
+            });
+        });
+        function loadCapCha() {
+            $.ajax({
+                url: "/CapNganh/GetCapParent",
+                data: {
+                    idParent:  a
+                },
+                type: "GET",
+                datatype: "json",
+
+                success: function (response) {
+                    var html = "<option value='' selected>Chọn cấp ngành</option>";
+
+                    $.each(response.data, function (index, value) {
+                        html += "<option value='" + value.Cap + "'> " + value.Cap + "'--------";
+                        //html += "<div class='row'><div class='column'>" + value.Cap + "</div> <div class='column'>" + value.Caption + "</div></div>";
+                        html += value.Caption;
+                        html += "</option>";
+                    });
+                    $("#ddCapCha").html(html);
+                }
+            });
+        };
+        function loadTreeGrid() {
+            $.ajax({
+                url: "/CapNganh/GetForTreeGrid",
+                type: "GET",
+                datatype: "json",
+                asycn: false,
+                success: function (response) {
+                    var html = "";
+                    $.each(response.data, function (index, value) {
+                        var str = (value.CapCha == null) ? "" : " treegrid-parent-" + value.CapCha.toString();
+                        html += "<tr class='treegrid-" + value.Cap.toString() + str + "'>";
+                        html += "<td style='width:150px'>"+value.Cap+"</td>";
+                        html += "<td>" + value.Caption + "</td>";
+                        html += "<td>" + value.CapOrder + "</td>";
+                        html += "<td><button class='btn btn-secondary btnEdit' data-id='" + value.Id + "'>Sửa</button></td>";
+                        html += "</tr>";
+                    });
+                    $(".tree").html(html);
+                    $('.tree').treegrid();
+                }
+            });
+        }
+
+        function getSelectorEndClass(selector) {
+            var ar = selector.attr('class').split(' ');
+            if (ar.length > 0) {
+                return ar[ar.length - 1];
+            }
+            return '';
+        }
+    </script>
+}

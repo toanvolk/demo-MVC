@@ -1,0 +1,163 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Cấp ngành</h2>
+
+<div class="panel panel-group">
+
+    <div class="form-group">
+        <input type="hidden" id="txtId" />
+        <input placeholder="Nhập cấp ngành" id="txtCapNganh" class="form-control" />
+    </div>
+    <div class="form-group">
+        <select class="form-control" id="ddCapCha">
+            <option value="" selected>Chọn cấp ngành</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <input placeholder="Nhập tên cấp" id="txtTenCapNganh" class="form-control" />
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary" id="btnSave">Lưu</button>
+    </div>
+</div>
+
+
+<div class="panel-group">
+    <div class="container-fluid">
+
+    </div>
+</div>
+
+<div class="wrapper">
+    <table class="tree">
+        
+    </table>
+    <table class="tree-main" data-options="url:'/capnganhnghe/GetForTreeGrid',idField:'Id',treeField:'MaNganh'">
+        <thead>
+            <tr>
+                <th data-options="field:'MaNganh',width:150">Cấp ngành</th>
+                <th data-options="field:'TenNganh',width:300">Tên ngành</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+@section scripts{
+    <script src="~/Scripts/js/jquery.treegrid.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            loadCapCha();
+            loadTreeGrid1();
+
+            $("#btnSave").off('click').on('click', function () {
+                var cap = $("#txtCapNganh").val();
+                var capcha = $("#ddCapCha option:selected").val();
+                var tencap = $("#txtTenCapNganh").val();
+                if (cap != "") {
+                    $.ajax({
+                        url: "/CapNganhnghe/InsertData",
+                        data: {
+                            MaNganh: cap,
+                            ParentID: capcha,
+                            TenNganh: tencap
+                        },
+                        type: "POST",
+                        datatype: "json",
+
+                        success: function (response) {
+                            if (response > 0) {
+                                alert("Insert thành công!");
+                                loadCapCha();
+                                loadTreeGrid();
+                            }
+                        }
+                    });
+                }
+            });
+            $(".tree").off('click').on('click', 'button', function () {
+                if (getSelectorEndClass($(this)) == "btnEdit")
+                {
+                    alert($(this).data("id"));
+                    $.ajax({
+                        url: "/CapNganh/GetById",
+                        data: { id: $(this).data("id") },
+                        type: "GET",
+                        datatype: "json",
+
+                        success: function (response) {
+                            $("#txtId").val(response.Id);
+                            $("#txtCapNganh").val(response.Cap);
+                            $("#ddCapCha ").val(response.CapCha);
+                            $("#txtTenCapNganh").val(response.Caption);
+                            $("#txtOrder").val(response.CapOrder);
+                        },
+
+                    });
+                }
+            });
+        });
+        function loadCapCha() {
+            $.ajax({
+                url: "/CapNganhNghe/GetCapParent",               
+                type: "GET",
+                datatype: "json",
+
+                success: function (response) {
+                    var html = "<option value='' selected>Chọn cấp ngành</option>";
+
+                    $.each(response, function (index, value) {
+                        html += "<option value='" + value.NganhNgheID + "'> " + value.MaNganh + "'--------";
+                        //html += "<div class='row'><div class='column'>" + value.Cap + "</div> <div class='column'>" + value.Caption + "</div></div>";
+                        html += value.TenNganh;
+                        html += "</option>";
+                    });
+                    $("#ddCapCha").html(html);
+                }
+            });
+        };
+        function loadTreeGrid() {
+            $.ajax({
+                url: "/CapNganhNghe/GetForTreeGrid",
+                type: "GET",
+                datatype: "json",
+                asycn: false,
+                success: function (response) {
+                    var html = "";
+                    $.each(response, function (index, value) {
+                        var str = (value.ParentID == null) ? "" : " treegrid-parent-" + value.ParentID.toString();
+                        html += "<tr class='treegrid-" + value.Id.toString() + str + "'>";
+                        html += "<td>" + value.MaNganh + "</td>";
+                        html += "<td>" + value.TenNganh + "</td>";
+                        //html += "<td><button class='btn btn-secondary btnEdit' data-id='" + value.Id + "'>Sửa</button></td>";
+                        html += "</tr>";
+                    });
+                    $(".tree").html(html);
+                   
+                }
+            });
+        }
+        function loadTreeGrid1()
+        {
+            $('#tree-main').treegrid({
+                url: '/capnganhnghe/GetForTreeGrid',
+                idField: 'Id',
+                treeField: 'MaNganh',
+                columns: [[
+                    { title: 'Cấp ngành', field: 'MaNganh', width: 300 },
+                    { title: 'Tên ngành', field: 'Id', width: 150, align: 'right' },
+                ]]
+            });
+        }
+        function getSelectorEndClass(selector) {
+            var ar = selector.attr('class').split(' ');
+            if (ar.length > 0) {
+                return ar[ar.length - 1];
+            }
+            return '';
+        }
+    </script>
+}

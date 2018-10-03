@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Auto complete textbox</h2>
+
+<div class="form-group">
+    Tên ngành
+    <input type="text" name="name" value="" class="form-control"/>
+</div>
+<div class="form-group">
+    Mã Ngành
+    <input type="text" name="name" value="" class="form-control" id="txtMaNganh"/>
+    <div class="listMaNganh"></div>
+</div>
+
+@section scripts{
+    
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#txtMaNganh").off('keyup').on('keyup', function () {
+            var txt = $(this).val();
+            if (txt != "")
+            {
+                var html = txt;
+                $(".listMaNganh").html(html);
+            }
+            else {
+                $(".listMaNganh").html('');
+            }
+        });
+    });
+
+</script>
+
+}

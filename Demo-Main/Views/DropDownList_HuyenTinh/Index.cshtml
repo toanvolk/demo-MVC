@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Dropdown list tỉnh - huyện</h2>
+
+<div class="form-group">
+    Tỉnh thành
+    <select class="form-control" id="ddTinhThanh"></select>
+</div>
+
+<div class="form-group">
+    Quận - huyện
+    <select class="form-control" id="ddQuanHuyen">
+        <option selected value=''>Chọn quận huyện</option>
+
+    </select>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            loadTinhThanh();
+            $("#ddTinhThanh").off('change').on('change', function () {
+                var idTinhThanh = $("#ddTinhThanh option:selected").val();
+                if (idTinhThanh != "") {
+                    loadQuanHuyen(idTinhThanh);
+                }
+                else {
+                }
+            });
+        });
+        function loadTinhThanh() {
+            $.ajax({
+                url: "/DropDownList_HuyenTinh/loadTinhThanh",
+                datatype: "json",
+                type: "GET",
+
+                success: function (response) {
+                    var html = "<option selected value= ''>Chọn tỉnh thành</option>";
+                    $.each(response, function (index, value) {
+                        html += "<option value='" + value.TinhThanhPhoID + "'>" + value.TinhThanhPhoName + "</option>";
+                    });
+                    $("#ddTinhThanh").html(html);
+                },
+
+                error: function (response) {
+                    Console.log(response);
+                }
+
+            });
+        }
+        function loadQuanHuyen(idTinhThanh) {
+            $.ajax({
+                url: "/DropDownList_HuyenTinh/loadQuanHuyen",
+                data: {idTinhThanh: idTinhThanh},
+                datatype: "json",
+                type: "GET",
+
+                success: function (response) {
+                    var html = "<option selected value= ''>Chọn quận huyện</option>";
+                    $.each(response, function (index, value) {
+                        html += "<option value='" + value.QuanHuyenID + "'>" + value.QuanHuyenName + "</option>";
+                    });
+                    $("#ddQuanHuyen").html(html);
+                },
+
+                error: function (response) {
+                    Console.log(response);
+                }
+
+            });
+        }
+    </script>
+}

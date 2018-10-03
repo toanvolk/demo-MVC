@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Dropdown list binding value</h2>
+
+<div class="col-sm-3">
+    Tỉnh thành
+    <select class="form-control" id="ddTinhThanh"></select>
+</div>
+<div class="col-sm-9">
+    Mã tỉnh thành
+    <input class="form-control" type="text" placeholder="Mã tỉnh thành" id="txtMaTinhThanh" />
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            loadTinhThanh();
+            $("#ddTinhThanh").off('change').on('change', function () {
+                var idTinhThanh = $("#ddTinhThanh option:selected").val();
+
+                if (idTinhThanh != "") {
+                    $("#txtMaTinhThanh").val(idTinhThanh);
+                }
+                else {
+                    $("#txtMaTinhThanh").val('');
+                }
+            });
+        });
+        function loadTinhThanh() {
+            $.ajax({
+                url: "/DropDownListBindingValue/loadTinhThanh",
+                datatype: "json",
+                type: "GET",
+
+                success: function (response) {
+                    var html = "<option selected value= ''>Chọn tỉnh thành</option>";
+                    $.each(response, function (index, value) {
+                        html += "<option value='" + value.TinhThanhPhoID + "'>" + value.TinhThanhPhoName + "</option>";
+                    });
+                    $("#ddTinhThanh").html(html);
+                },
+
+                error: function (response) {
+                    Console.log(response);
+                }
+
+            });
+        }
+        
+    </script>
+}

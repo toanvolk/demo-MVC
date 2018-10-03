@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "Tree table";
+}
+
+<h2>Tree table</h2>
+
+<div class="wrapper">
+    <table class="tree-main">
+        <thead>
+            <tr>
+                <th>
+                    Cấp nghành
+                </th>
+                <th>
+                    Tên nghành
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+@section scripts{
+    <script src="/Scripts/js/jquery.treetable.js"></script>
+    @*<script src="~/Scripts/js/jquery.treegrid.min.js"></script>*@
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            loadTableData();
+        });
+
+
+        function loadTableData() {
+            $.ajax({
+                url: "/CapNganhNghe/GetForTreeGrid",
+                type: "GET",
+                datatype: "json",
+                asycn: false,
+                success: function (response) {
+                    var html = "";
+                    $.each(response, function (index, value) {
+                        var str = (value.ParentID == null) ? "" : "' data-tt-parent-id = '" + value.ParentID.toString();
+                        html += "<tr data-tt-id='" + value.Id.toString() + str + "'>";
+                        html += "<td>" + value.MaNganh + "</td>";
+                        html += "<td>" + value.TenNganh + "</td>";
+                        //html += "<td><button class='btn btn-secondary btnEdit' data-id='" + value.Id + "'>Sửa</button></td>";
+                        html += "</tr>";
+                    });
+                    $(".tree-main tbody").html(html);
+                    $(".tree-main").treetable({ expandable: true });
+                }
+            });
+        }
+    </script>
+}
