@@ -11,9 +11,9 @@ namespace Demo_Main.Models.BusinessModel
         DemoDbContext db = new DemoDbContext();
         public List<AutoCompleteTextBox> GetAutoText(string maNganh)
         {
-            List<CapNganhNghe> lstob = db.CapNganhNghes.ToList();
+            List<CapNganhNghe> lstob = db.CapNganhNghes.Where(o => o.TenNganh.Contains(maNganh)).ToList();
             var data = (from m in lstob
-                       select new AutoCompleteTextBox() {Id = m.NganhNgheID, TenNganh = m.TenNganh }).ToList();
+                        select new AutoCompleteTextBox() { Id = m.NganhNgheID, TenNganh = m.TenNganh }).ToList();
             return data;
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Demo_Main.Models.BusinessModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +9,7 @@ namespace Demo_Main.Controllers
 {
     public class AutoCompleteTextBoxController : Controller
     {
+        AutoCompleteTextBoxModel model = new AutoCompleteTextBoxModel();
         // GET: AutoCompleteTextBox
         public ActionResult Index()
         {
@@ -15,7 +17,8 @@ namespace Demo_Main.Controllers
         }
         public JsonResult GetAutoText(string maNganh)
         {
-            return null;
+            var data = model.GetAutoText(maNganh);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
     }
 }
