@@ -16,5 +16,9 @@ namespace Demo_Main.Models.BusinessModel
                         select new AutoCompleteTextBox() { Id = m.NganhNgheID, TenNganh = m.TenNganh }).ToList();
             return data;
         }
+        public List<string> LoadKeyNoiCap(string skey)
+        {
+            return db.tbl_TinhThanhPho.Where(o => o.TinhThanhPhoName.Contains(skey)).Select( o=>o.TinhThanhPhoName).ToList();            
+        }
     }
 }

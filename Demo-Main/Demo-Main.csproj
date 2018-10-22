@@ -164,6 +164,7 @@
     <Compile Include="Controllers\DropDownList_HuyenTinhController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TreeTableController.cs" />
+    <Compile Include="Controllers\UploadFileController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -180,6 +181,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\css\style.css" />
+    <Content Include="assets\img\border-image.png" />
+    <Content Include="assets\img\icons.png" />
+    <Content Include="assets\js\jquery.fileupload.js" />
+    <Content Include="assets\js\jquery.iframe-transport.js" />
+    <Content Include="assets\js\jquery.knob.js" />
+    <Content Include="assets\js\jquery.ui.widget.js" />
+    <Content Include="assets\js\script.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\img\collapse.png" />
@@ -238,9 +247,11 @@
     <Content Include="Views\CapNganhNghe\Index.cshtml" />
     <Content Include="Views\AutoCompleteTextBox\Index.cshtml" />
     <Content Include="Views\TreeTable\Index.cshtml" />
+    <Content Include="Views\UploadFile\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="uploads\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

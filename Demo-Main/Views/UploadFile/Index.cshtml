@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+@using (Html.BeginForm("UploadFile", "UploadFile", FormMethod.Post, new { enctype = "multipart/form-data", id = "upload" }))
+{
+    <div id="drop">
+        Drop Here
+
+        <a>Browse</a>
+        @*<input type="file" name="upl" multiple />*@
+        <input type="file" name="file" multiple />
+    </div>
+
+    <ul>
+        <!-- The file uploads will be shown here -->
+    </ul>
+
+}
+@section scripts{
+    <script src="/assets/js/jquery.knob.js"></script>
+
+    <!-- jQuery File Upload Dependencies -->
+    <script src="/assets/js/jquery.ui.widget.js"></script>
+    <script src="/assets/js/jquery.iframe-transport.js"></script>
+    <script src="/assets/js/jquery.fileupload.js"></script>
+
+    <!-- Our main JS file -->
+    <script src="/assets/js/script.js"></script>
+    
+}
