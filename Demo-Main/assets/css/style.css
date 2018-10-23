@@ -258,3 +258,7 @@ footer h2 i{
     float: left;
     margin-top: 11px;
 }
+.cus_css .list-group-item{
+    background: none;
+    border: none;
+}

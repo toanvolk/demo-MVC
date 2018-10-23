@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "ViewMain";
+}
+
+<h2>Attack file ViewMain</h2>
+<div class="row">
+    <div class="col-sm-12">
+        <input type="file" multiple id="chsfile" alt=""/>
+    </div>
+    <div class="col-sm-6 cus_css">
+        <ul class="list-group"></ul>
+    </div>
+</div>
+
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        var files;
+        $(document).ready(function () {
+            $("#chsfile").off("change").on("change", function () {
+                var html = "";
+                $(this).text('');
+                for (var i = 0; i < $(this).get(0).files.length; ++i) {
+                    //names.push($(this).get(0).files[i].name);
+                    var filename = $(this).get(0).files[i].name;
+                    var filesize = formatFileSize($(this).get(0).files[i].size);
+
+                    html = "<li class='list-group-item'>";
+                    html += "<div class='col-sm-5'>"+ filename + " (" + filesize + ")</div>";
+                    html += "<div class='col-sm-5'>";
+                    html += "<div class='progress'>";
+                    html += "<div class='progress-bar' role='progressbar' aria-valuenow='70' aria-valuemin='0' aria-valuemax='100' style='width:70%'>"
+                    html += "70%";
+                    html += "</div></div></div>";
+                    html += "<div class='col-sm-2'><span class='badge'><a class='glyphicon glyphicon-trash' data-id='" + i + "' data-content='" + filename + "'></a></span></div>";
+                    html += "<div class='clearfix'></div>";
+                    html += "</li>";
+                    $(".list-group").append(html);
+                }
+
+                $(".list-group a.glyphicon-trash").off('click').on('click', function () {
+                    var id = $(this).data("id");
+                    files = $("#chsfile")[0].files;
+                    files = $.grep(files, function (value) {
+                        return value != files[id];
+                    });
+                    
+                });
+            });
+
+        });
+
+
+        function formatFileSize(bytes) {
+            if (typeof bytes !== 'number') {
+                return '';
+            }
+
+            if (bytes >= 1000000000) {
+                return (bytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+            }
+
+            if (bytes >= 1000000) {
+                return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+            }
+
+            return (bytes / 1024).toFixed(2) + ' KB';
+        }
+    </script>
+}
+

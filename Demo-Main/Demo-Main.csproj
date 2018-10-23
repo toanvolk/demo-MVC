@@ -158,6 +158,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Common\GenerateFileName.cs" />
+    <Compile Include="Common\ReplaceUnicode.cs" />
     <Compile Include="Controllers\AutoCompleteTextBoxController.cs" />
     <Compile Include="Controllers\CapNganhNgheController.cs" />
     <Compile Include="Controllers\DropDownListBindingValueController.cs" />
@@ -181,9 +183,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\css\fu.css" />
+    <Content Include="assets\css\fustyle.css" />
     <Content Include="assets\css\style.css" />
     <Content Include="assets\img\border-image.png" />
     <Content Include="assets\img\icons.png" />
+    <Content Include="assets\img\icons8-trash-24.png" />
+    <Content Include="assets\js\fuindex.js" />
     <Content Include="assets\js\jquery.fileupload.js" />
     <Content Include="assets\js\jquery.iframe-transport.js" />
     <Content Include="assets\js\jquery.knob.js" />
@@ -227,7 +233,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -248,6 +256,9 @@
     <Content Include="Views\AutoCompleteTextBox\Index.cshtml" />
     <Content Include="Views\TreeTable\Index.cshtml" />
     <Content Include="Views\UploadFile\Index.cshtml" />
+    <Content Include="Views\UploadFile\ViewMain.cshtml" />
+    <Content Include="Views\UploadFile\ViewMainAjax.cshtml" />
+    <Content Include="Views\UploadFile\View1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

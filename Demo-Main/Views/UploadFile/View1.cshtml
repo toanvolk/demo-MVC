@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "View1";
+}
+<form method="post" class="file-uploader" action="" enctype="multipart/form-data">
+    <div class="file-uploader__message-area">
+        <p>Select a file to upload</p>
+    </div>
+    <div class="file-chooser">
+        <input class="file-chooser__input" type="file" multiple>
+    </div>
+    <input class="file-uploader__submit-button" type="submit" value="Upload">
+</form>
+
+
+@section scripts{
+<script src="~/assets/js/fuindex.js"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#btnUpload').on('click', function () {
+                var file = $('#fileUpload').get(0).files;
+                var formData = new FormData();
+                var url = "/UploadFile/upload";
+
+                for (var i = 0; i < $('#fileUpload').get(0).files.length; ++i) {
+                    formData.append("uploadFiles", $('#fileUpload').get(0).files[i]);
+                }
+
+                //formData.append("uploadFiles", file);
+
+                $.ajax
+                (
+                    {
+                        url: url,
+                        type: 'post',
+                        cache: false,
+                        data: formData,
+                        // Tell jQuery not to process data or worry about content-type
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            alert(data.Message);
+                        },
+                        xhr: function () {
+                            var myXhr = $.ajaxSettings.xhr();
+                            if (myXhr.upload) {
+                                myXhr.upload.addEventListener('progress', function (e) {
+                                    if (e.lengthComputable) {
+                                        $('progress').attr({
+                                            value: e.loaded,
+                                            max: e.total,
+                                        });
+                                        var uploadProgress = e.loaded / e.total * 100;
+                                        $('#upload-progress').html("Uploading: " + uploadProgress);
+                                    }
+                                }, false);
+                            }
+
+                            return myXhr;
+                        }
+                    }
+                )
+            })
+        });
+</script>
+}
