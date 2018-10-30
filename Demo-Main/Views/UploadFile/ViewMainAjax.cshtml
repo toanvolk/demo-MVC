@@ -21,10 +21,11 @@
             $('#btnUpload').on('click', function () {
                 var file = $('#fileUpload').get(0).files;
                 var formData = new FormData();
-                var url = "/UploadFile/upload";
+                var url = "/UploadFile/UploadFile";
 
                 for (var i = 0; i < $('#fileUpload').get(0).files.length; ++i) {
-                    formData.append("uploadFiles", $('#fileUpload').get(0).files[i]);
+                    formData.append("file", $('#fileUpload').get(0).files[i]);
+                    //formData.append("uploadFiles", $('#fileUpload').get(0).files[i]);
                 }
 
                 //formData.append("uploadFiles", file);

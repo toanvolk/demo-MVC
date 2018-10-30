@@ -85,7 +85,7 @@ namespace Demo_Main.Controllers
 
             if (uploadFile != null)
             {
-                string fileName = GenerateFileName.Generate(uploadFile);
+                string fileName = GenerateFileName.Generate(uploadFile);//Get file name
                 string pathUploadFileServer = "/uploads/" + fileName;
 
                 //if another file with the same name is existed, add number behind
